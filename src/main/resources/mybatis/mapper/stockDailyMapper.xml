@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stock.dao.interfaces.StockDailyMapper">
+    <insert id="save" parameterType="StockDaily">
+        insert into stock_daily(
+        code,
+        name,
+        tdate,
+        open_price,
+        close_price,
+        high_price,
+        low_price,
+        last_close_price,
+        chage_rate,
+        change_amount,
+        turnover_rate,
+        trading_volume,
+        turnover,
+        total_value,
+        circulation_market_value)
+        values(#{code},#{name},#{tdate,jdbcType=TIMESTAMP},#{openPrice},#{closePrice},#{highPrice},#{lowPrice},#{lastClosePrice},#{chageRate}
+        ,#{changeAmount},#{turnoverRate},#{tradingVolume},#{turnover},#{totalValue},#{circulationMarketValue}
+        )
+    </insert>
+
+    <insert id="batchSave">
+        insert into stock_daily(
+        code,
+        name,
+        tdate,
+        open_price,
+        close_price,
+        high_price,
+        low_price,
+        last_close_price,
+        chage_rate,
+        change_amount,
+        turnover_rate,
+        trading_volume,
+        turnover,
+        total_value,
+        circulation_market_value) values
+        <foreach item="item" collection="list" separator=",">
+            <![CDATA[
+	     		(#{item.code},#{item.name},#{item.tdate,jdbcType=TIMESTAMP},#{item.openPrice},#{item.closePrice},#{item.highPrice},
+	     		#{item.lowPrice},#{item.lastClosePrice},#{item.chageRate}
+                ,#{item.changeAmount},#{item.turnoverRate},#{item.tradingVolume},#{item.turnover},#{item.totalValue},#{item.circulationMarketValue}
+                )
+	    	 ]]>
+        </foreach>
+    </insert>
+</mapper>

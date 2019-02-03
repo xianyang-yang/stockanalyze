@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stock.dao.interfaces.StockFinancialReportMapper">
+    <resultMap id="BaseResultMap" type="stock.model.StockFinancialReport">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="report_type" property="reportType" jdbcType="VARCHAR"/>
+        <result column="report_date" property="reportDate" jdbcType="DATE"/>
+        <result column="standard_date" property="standardDate" jdbcType="DATE"/>
+        <result column="profit_beps_total" property="profitBepsTotal" jdbcType="DECIMAL"/>
+        <result column="profit_beps_y2y" property="profitBepsY2y" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, code, name, report_type, report_date, standard_date, profit_beps_total, profit_beps_y2y
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from stock_financial_report
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from stock_financial_report
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="save" parameterType="stock.model.StockFinancialReport">
+    insert into stock_financial_report (code, name,
+      report_type, report_date, standard_date, 
+      profit_beps_total, profit_beps_y2y)
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{reportType,jdbcType=VARCHAR}, #{reportDate,jdbcType=DATE}, #{standardDate,jdbcType=DATE}, 
+      #{profitBepsTotal,jdbcType=DECIMAL}, #{profitBepsY2y,jdbcType=DECIMAL})
+  </insert>
+
+    <insert id="batchSave">
+        insert into stock_financial_report (code, name,
+        report_type, report_date, standard_date,
+        profit_beps_total, profit_beps_y2y)
+        values
+        <foreach item="item" collection="list" separator=",">
+            <![CDATA[
+            (#{item.code,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
+              #{item.reportType,jdbcType=VARCHAR}, #{item.reportDate,jdbcType=DATE}, #{item.standardDate,jdbcType=DATE},
+              #{item.profitBepsTotal,jdbcType=DECIMAL}, #{item.profitBepsY2y,jdbcType=DECIMAL})
+         ]]>
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="stock.model.StockFinancialReport">
+        update stock_financial_report
+        <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="reportType != null">
+                report_type = #{reportType,jdbcType=VARCHAR},
+            </if>
+            <if test="reportDate != null">
+                report_date = #{reportDate,jdbcType=DATE},
+            </if>
+            <if test="standardDate != null">
+                standard_date = #{standardDate,jdbcType=DATE},
+            </if>
+            <if test="profitBepsTotal != null">
+                profit_beps_total = #{profitBepsTotal,jdbcType=DECIMAL},
+            </if>
+            <if test="profitBepsY2y != null">
+                profit_beps_y2y = #{profitBepsY2y,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="stock.model.StockFinancialReport">
+    update stock_financial_report
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      report_type = #{reportType,jdbcType=VARCHAR},
+      report_date = #{reportDate,jdbcType=DATE},
+      standard_date = #{standardDate,jdbcType=DATE},
+      profit_beps_total = #{profitBepsTotal,jdbcType=DECIMAL},
+      profit_beps_y2y = #{profitBepsY2y,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
