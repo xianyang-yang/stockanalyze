@@ -18,15 +18,18 @@
     id, code, name, pe_radio, pb_radio, industry, list_date, issue_price, first_open_price,
     total_value, circulation_market_value
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="findByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from stock_basic_info
-    where id = #{id,jdbcType=BIGINT}
+    where code = #{code,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <select id="listAllStockCodes" resultType="java.lang.String">
+    select code from stock_basic_info order by code limit #{offset},#{limit}
+  </select>
+  <delete id="deleteByCode" parameterType="java.lang.String" >
     delete from stock_basic_info
-    where id = #{id,jdbcType=BIGINT}
+    where code = #{code,jdbcType=VARCHAR}
   </delete>
   <insert id="save" parameterType="StockBasicInfo" >
     insert into stock_basic_info (id, code, name, 
@@ -67,7 +70,7 @@
   </insert>
 
 
-  <update id="updateByPrimaryKeySelective" parameterType="StockBasicInfo" >
+  <update id="updateSelectiveByCode" parameterType="StockBasicInfo" >
     update stock_basic_info
     <set >
       <if test="code != null" >
@@ -101,20 +104,6 @@
         circulation_market_value = #{circulationMarketValue,jdbcType=DECIMAL},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="StockBasicInfo" >
-    update stock_basic_info
-    set code = #{code,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      pe_radio = #{peRadio,jdbcType=DECIMAL},
-      pb_radio = #{pbRadio,jdbcType=DECIMAL},
-      industry = #{industry,jdbcType=VARCHAR},
-      list_date = #{listDate,jdbcType=DATE},
-      issue_price = #{issuePrice,jdbcType=DECIMAL},
-      first_open_price = #{firstOpenPrice,jdbcType=DECIMAL},
-      total_value = #{totalValue,jdbcType=DECIMAL},
-      circulation_market_value = #{circulationMarketValue,jdbcType=DECIMAL}
-    where id = #{id,jdbcType=BIGINT}
+    where  code = #{code,jdbcType=VARCHAR}
   </update>
 </mapper>

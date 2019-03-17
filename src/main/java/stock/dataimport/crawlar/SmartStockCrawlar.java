@@ -23,7 +23,7 @@ public class SmartStockCrawlar implements StockCrawlar {
     @Override
     public StockBasicInfo fetchStockBasicInfo(String code) {
         StockBasicInfo s1 = tencentStockCrawlar.fetchStockBasicInfo(code);
-        if(s1==null){
+        if (s1 == null) {
             return null;
         }
         StockBasicInfo s2 = neteaseStockCrawlar.fetchStockBasicInfo(code);
